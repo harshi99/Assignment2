@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Earthquake Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 ,h2{
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+        }
+
+        button {
+            padding: 5px 10px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <h1>Earthquake Search</h1>
+
+    <h2>Execute SQL Query</h2>
+    <form action="/sql" method="post">
+        <textarea name="query" rows="5" cols="50"></textarea><br>
+        <input type="submit" value="Execute">
+    </form>
+</body>
+</html>
