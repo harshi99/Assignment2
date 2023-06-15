@@ -1,0 +1,74 @@
+#Creating table in SQL database
+
+CREATE TABLE all_month(
+    time DATETIME ,
+    latitude NUMERIC(10,2),
+    longitude NUMERIC(10,2),
+    depth NUMERIC(10,2),
+    mag FLOAT,
+    magType VARCHAR(10),
+    nst INT,
+    gap FLOAT,
+    dmin FLOAT,
+    rms FLOAT,
+    net VARCHAR(10),
+    id VARCHAR(50) PRIMARY KEY,
+    updated DATETIME,
+    place VARCHAR(255),
+    type VARCHAR(50),
+    horizontalError FLOAT,
+    depthError FLOAT,
+    magError FLOAT,
+    magNst FLOAT,
+    status VARCHAR(20),
+    locationSource VARCHAR(10),
+    magSource VARCHAR(10));
+  
+ #Updating Negative Latitude and Longitude values
+ 
+UPDATE all_month
+SET latitude = latitude + 90
+WHERE latitude < 0;
+
+UPDATE all_month
+SET longitude = longitude + 180
+WHERE longitude < 0;
+
+#Changing Time Zone
+
+SELECT time AT TIME ZONE 'UTC' AT TIME ZONE 'Central Standard Time' AS LocalTime
+FROM all_month;
+
+#imputing missing values with mean value
+
+UPDATE all_month
+SET nst = (SELECT AVG(nst) FROM all_month WHERE nst IS NOT NULL)
+WHERE nst IS NULL;
+
+UPDATE all_month
+SET gap = (SELECT AVG(gap) FROM all_month WHERE gap IS NOT NULL)
+WHERE gap IS NULL;
+
+UPDATE all_month
+SET dmin = (SELECT AVG(dmin) FROM all_month WHERE dmin IS NOT NULL)
+WHERE dmin IS NULL;
+
+UPDATE all_month
+SET horizontalError = (SELECT AVG(horizontalError) FROM all_month WHERE horizontalError IS NOT NULL)
+WHERE horizontalError IS NULL;
+
+UPDATE all_month
+SET magError = (SELECT AVG(magError) FROM all_month WHERE magError IS NOT NULL)
+WHERE magError IS NULL;
+
+UPDATE all_month
+SET magNst = (SELECT AVG(magNst) FROM all_month WHERE magNst IS NOT NULL)
+WHERE magNst IS NULL;
+
+#Changing SQL table Columns
+
+EXEC sp_rename 'all_month.time', 'Date_time', 'COLUMN';
+EXEC sp_rename 'all_month.mag', 'Magnitude', 'COLUMN';
+EXEC sp_rename 'all_month.magSource', 'MagnitudeSource', 'COLUMN';
+EXEC sp_rename 'all_month.magError', 'MagnitudeError', 'COLUMN';
+
